@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.ResponseDto;
+import model.Subject;
 import repository.DbContext;
 
 /**
@@ -47,8 +48,26 @@ public class ControllerBase extends HttpServlet {
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(ControllerBase.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
-                Logger.getLogger(ControllerBase.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ControllerBase.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+            break;
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getServletPath();
+        switch (action) {
+            case "/createSubject": {
+                try {
+                    createSubject(request, response);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ControllerBase.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ControllerBase.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             break;
         }
@@ -62,6 +81,19 @@ public class ControllerBase extends HttpServlet {
     private void getSubject(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException, SQLException {
         List subjects = _context.getSubjects();
         responseClient(new ResponseDto(true, "Thành công", subjects), response);
+    }
+
+    private void createSubject(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, ClassNotFoundException, SQLException {
+        System.out.println("SubjecID: " + request.getParameter("SubjectID"));
+        Subject subject = new Subject(
+                request.getParameter("SubjectID"),
+                request.getParameter("SubjectCode"),
+                request.getParameter("SubjectName"),
+                request.getParameter("Faculty"),
+                10
+        );
+        _context.createSubject(subject);
+        responseClient(new ResponseDto(true, "Thành công", null), response);
     }
 
     public void responseClient(ResponseDto res, HttpServletResponse response) throws JsonProcessingException, IOException {

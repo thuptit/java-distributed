@@ -18,21 +18,33 @@
             <div class="row">
                 <div class="col-6">
                     <div class="row">
-                        <form>
+                        <form id="form-subject">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                                <label for="exampleInputEmail1">Subject ID</label>
+                                <input type="text" class="form-control" id="SubjectID">
+         
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                                <label for="exampleInputEmail1">Subject Code</label>
+                                <input type="text" class="form-control" id="SubjectCode">
+         
                             </div>
-                            <div class="form-group form-check">
-                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Subject Name</label>
+                                <input type="text" class="form-control" id="SubjectName">
+         
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Faculty</label>
+                                <input type="text" class="form-control" id="Faculty">
+         
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Credit</label>
+                                <input type="text" class="form-control" id="Credit">
+         
+                            </div>
+                            <button type="button" onclick="createSubject()" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -72,14 +84,32 @@
             </div>
         </div>
         <script>
-        $(document).ready(function () {
-            console.log("ready!");
-            subjects();
-        });
+//        $(document).ready(function () {
+//            console.log("ready!");
+//            subjects();
+//        });
         const subjects = () => {
             $.ajax({
                 url: '/distributed-webapp/getSubjects',
                 type: 'GET',
+                success: (res) => {
+                    console.log(res);
+                }
+            })
+        }
+        const createSubject = () => {
+            var $form = $('#form-subject').find('form');
+            console.log($form.serialize());
+            $.ajax({
+                url: '/distributed-webapp/createSubject',
+                type: 'POST',
+                data: {
+                    SubjectID: $('#SubjectID').val(),
+                    SubjectCode: $('#SubjectCode').val(),
+                    SubjectName: $('#SubjectName').val(),
+                    Faculty: $('#Faculty').val(),
+                    Credit: $('#Credit').val()
+                },
                 success: (res) => {
                     console.log(res);
                 }
